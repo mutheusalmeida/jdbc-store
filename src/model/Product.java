@@ -1,7 +1,7 @@
-package com.store.jdbc;
+package model;
 
 public class Product {
-	private int id;
+	private Integer id;
 	private String name;
 	private String description;
 
@@ -10,7 +10,12 @@ public class Product {
 		this.description = description;
 	}
 	
-	public void setId(int id) {
+	public Product(Integer id, String name, String description) {
+		this(name, description);
+		this.id = id;
+	}
+	
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	
@@ -24,6 +29,6 @@ public class Product {
 	
 	@Override
 	public String toString() {
-		return "Product: " + this.id + ", " + this.name + ", " + this.description;	
+		return String.format("Product: %d, %s, %s", this.id, this.name, this.description);	
 	}
 }
