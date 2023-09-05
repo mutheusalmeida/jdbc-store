@@ -11,7 +11,7 @@ import java.util.List;
 import model.Product;
 
 public class ProductDAO {
-	Connection connection;
+	private Connection connection;
 	
 	public ProductDAO(Connection connection) {
 		this.connection = connection;
@@ -49,7 +49,7 @@ public class ProductDAO {
 	}
 	
 	public List<Product> list () throws SQLException {
-		ArrayList<Product> products = new ArrayList<Product>();
+		List<Product> products = new ArrayList<Product>();
 		String sql = "SELECT * FROM products";
 	
 		try (
@@ -72,7 +72,6 @@ public class ProductDAO {
 			}
 		} catch (Exception e) {
             e.printStackTrace();
-            connection.rollback();
         }
 		
 		return products;
