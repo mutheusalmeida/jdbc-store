@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.List;
 
 import javax.swing.*;
@@ -27,6 +29,7 @@ public class ProductsFrame extends JFrame {
 	private DefaultTableModel model;
 	private ProductController productController;
 	private CategoryController categoryController;
+	private Product oldProduct = null;
 
 	public ProductsFrame() {
 		super("Products");
@@ -138,15 +141,32 @@ public class ProductsFrame extends JFrame {
 			}
 		});
 		
+		table.addPropertyChangeListener(new PropertyChangeListener() {
+
+			@Override
+			public void propertyChange(PropertyChangeEvent e) {
+				Integer id = (Integer) model.getValueAt(table.getSelectedRow(), 0);
+				String name = (String) model.getValueAt(table.getSelectedRow(), 1);
+				String description = (String) model.getValueAt(table.getSelectedRow(), 2);
+				
+				
+				if (oldProduct == null || !oldProduct.getId().equals(id)) {					
+					oldProduct = new Product(id, name, description);
+				}
+			}
+		});
+		
 		model.addTableModelListener(new TableModelListener() {
 			
 			@Override
 			public void tableChanged(TableModelEvent e) {
-				if (e.getType() == 0) {					
+				if (e.getType() == TableModelEvent.UPDATE) {
 					edit();
 				}
 			}
+			
 		});
+		
 	}
 	
 	private void clearTable() {
@@ -158,9 +178,13 @@ public class ProductsFrame extends JFrame {
 		String name = (String) model.getValueAt(table.getSelectedRow(), 1);
 		String description = (String) model.getValueAt(table.getSelectedRow(), 2);
 		
-		this.productController.edit(name, description, id);
+		if (!oldProduct.getName().equals(name) || !oldProduct.getDescription().equals(description)) {			
+			this.productController.edit(name, description, id);
+			
+			JOptionPane.showMessageDialog(rootPane, "Product successfully updated!");
+		}
 		
-		JOptionPane.showMessageDialog(rootPane, "Product successfully updated!");
+		oldProduct = null;
 	}
 
 	private void delete() {
@@ -188,16 +212,17 @@ public class ProductsFrame extends JFrame {
 	}
 
 	private void add() {
-		if (!fieldName.getText().equals("") && !fieldDescription.getText().equals("")) {
+		Category category = (Category) comboCategory.getSelectedItem();
+		
+		if (!fieldName.getText().equals("") && !fieldDescription.getText().equals("") && !category.getId().equals(0)) {
 			Product product = new Product(fieldName.getText(), fieldDescription.getText());
-			Category category = (Category) comboCategory.getSelectedItem();
 			product.setCategoryId(category.getId());
 			this.productController.add(product);
 			
 			JOptionPane.showMessageDialog(this, "Product successfully added!");
 			this.clear();
 		} else {
-			JOptionPane.showMessageDialog(this, "Name and description are required.");
+			JOptionPane.showMessageDialog(this, "All fields are required.");
 		}
 	}
 
