@@ -1,9 +1,10 @@
-package model;
+package com.store.jdbc.model;
 
 public class Product {
 	private Integer id;
 	private String name;
 	private String description;
+	private Integer categoryId;
 
 	public Product(String name, String description) {
 		this.name = name;
@@ -30,5 +31,17 @@ public class Product {
 	@Override
 	public String toString() {
 		return String.format("Product: %d, %s, %s", this.id, this.name, this.description);	
+	}
+
+	public Integer getId() {
+		return this.id;
+	}
+	
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+	
+	public Integer getCategoryId() {
+		return this.categoryId;
 	}
 }

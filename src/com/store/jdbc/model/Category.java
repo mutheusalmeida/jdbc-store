@@ -1,4 +1,4 @@
-package model;
+package com.store.jdbc.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class Category {
 	
 	@Override
 	public String toString() {
-		return String.format("Category: %d, %s", this.id, this.name);
+		return this.name;
 	}
 	
 	public String getName() {
@@ -28,5 +28,9 @@ public class Category {
 
 	public List<Product> getProducts() {
 		return this.products;
+	}
+
+	public Integer getId() {
+		return this.id;
 	}
 }

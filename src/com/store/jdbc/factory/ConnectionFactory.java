@@ -1,4 +1,4 @@
-package com.store.jdbc;
+package com.store.jdbc.factory;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -20,7 +20,11 @@ public class ConnectionFactory {
         this.dataSource = comboPooledDataSource;
     }
 
-    public Connection connection () throws SQLException {
-        return this.dataSource.getConnection();
+    public Connection connection () {
+    	try {
+    		return this.dataSource.getConnection();
+    	} catch (SQLException e) {
+			throw new RuntimeException(e);		
+		}
     }
 }
